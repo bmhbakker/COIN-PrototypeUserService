@@ -12,10 +12,14 @@ builder.Services.AddHttpClient("Controller", client =>
 builder.Services.AddSingleton<MockUserService>();
 
 
-
+builder.WebHost.UseUrls("http://localhost:5000");
 var app = builder.Build();
 
-app.MapOpenApi();
+// Alleen tijdens development de OpenAPI endpoint tonen
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
 
 // Health endpoint
 app.MapGet("/_health", () => Results.Ok(new { status = "ok", service = "UserService" }));

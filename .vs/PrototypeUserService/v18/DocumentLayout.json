@@ -1,0 +1,72 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\bramb\\Desktop\\PrototypeUserService\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7B29DCD2-2E22-4D7F-B7FD-8AEC4B244D27}|PrototypeUserService.csproj|c:\\users\\bramb\\desktop\\prototypeuserservice\\models\\deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B29DCD2-2E22-4D7F-B7FD-8AEC4B244D27}|PrototypeUserService.csproj|solutionrelative:models\\deck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B29DCD2-2E22-4D7F-B7FD-8AEC4B244D27}|PrototypeUserService.csproj|c:\\users\\bramb\\desktop\\prototypeuserservice\\models\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B29DCD2-2E22-4D7F-B7FD-8AEC4B244D27}|PrototypeUserService.csproj|solutionrelative:models\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B29DCD2-2E22-4D7F-B7FD-8AEC4B244D27}|PrototypeUserService.csproj|c:\\users\\bramb\\desktop\\prototypeuserservice\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B29DCD2-2E22-4D7F-B7FD-8AEC4B244D27}|PrototypeUserService.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Card.cs",
+              "DocumentMoniker": "C:\\Users\\bramb\\Desktop\\PrototypeUserService\\Models\\Card.cs",
+              "RelativeDocumentMoniker": "Models\\Card.cs",
+              "ToolTip": "C:\\Users\\bramb\\Desktop\\PrototypeUserService\\Models\\Card.cs",
+              "RelativeToolTip": "Models\\Card.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAADwvxwAAABtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T14:00:56.059Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\bramb\\Desktop\\PrototypeUserService\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\bramb\\Desktop\\PrototypeUserService\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T14:12:08.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Deck.cs",
+              "DocumentMoniker": "C:\\Users\\bramb\\Desktop\\PrototypeUserService\\Models\\Deck.cs",
+              "RelativeDocumentMoniker": "Models\\Deck.cs",
+              "ToolTip": "C:\\Users\\bramb\\Desktop\\PrototypeUserService\\Models\\Deck.cs",
+              "RelativeToolTip": "Models\\Deck.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T13:59:12.804Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

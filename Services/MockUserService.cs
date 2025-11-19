@@ -1,127 +1,163 @@
-﻿using System.Collections.Concurrent;
-using PrototypeUserService.Contracts;
+﻿using PrototypeUserService.Enums;
+using PrototypeUserService.Models.Responses;
+using PrototypeUserService.Models.Entities;
+using Microsoft.AspNetCore.Connections.Features;
 
 namespace PrototypeUserService.Services;
 
+//What should we return for everything? ServiceResponse to also handle errors? 
 public class MockUserService
 {
-    // username → userId
-    private readonly ConcurrentDictionary<string, Guid> _users = new();
+    //in-code storage (mock db)
+    private List<User> users = new List<User>();
 
-    // token → userId
-    private readonly ConcurrentDictionary<string, Guid> _tokens = new();
-
-    // userId → profiel
-    private readonly ConcurrentDictionary<Guid, (string Username, int Wins, int Losses)> _profiles = new(); 
-    
-    // userId -> owned cards
-    private readonly ConcurrentDictionary<Guid, List<Card>> _ownedCards = new();
-
-    // userId -> decks
-    private readonly ConcurrentDictionary<Guid, List<Deck>> _decks = new();
-    
-    private readonly Random _random = new();
-
-    // Simuleert registratie
-    public Guid Register(string username, string password)
+    public ServiceResponse<User> GetUserByUsername(string username)
     {
-        var id = _users.GetOrAdd(username, _ => Guid.NewGuid());
-        _profiles.TryAdd(id, (username, 0, 0));
-        return id;
+        //get user by username from db
+        User user = new User(1, username, 0, 0, null, null, 1000);
+        return new ServiceResponse<User>(user);
     }
 
-    // Simuleert login, maakt token aan
-    public string? Login(string username, string password)
+    public ServiceResponse<User> Register(string username, string password, string passwordConfirm)
     {
-        if (!_users.TryGetValue(username, out var userId))
-            return null;
-
-        var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray())[..22];
-        _tokens[token] = userId;
-        return token;
-    }
-
-    // Token omzetten naar userId
-    public Guid? ResolveUser(string token)
-    {
-        return _tokens.TryGetValue(token, out var id) ? id : null;
-    }
-
-    // Optioneel: alle users tonen (debug)
-    public IEnumerable<(string Username, Guid Id)> ListUsers()
-        => _users.Select(kv => (kv.Key, kv.Value));
-    
-    public (Guid Id, string Username, int Wins, int Losses)? GetProfile(Guid id) // 🟩
-    {
-        if (_profiles.TryGetValue(id, out var p))
-            return (id, p.Username, p.Wins, p.Losses);
-        return null;
-    }
-
-    public bool UpdateProfile(Guid id, string? username, int? wins, int? losses) // 🟩
-    {
-        if (!_profiles.TryGetValue(id, out var current)) return false;
-
-        var newUsername = username ?? current.Username;
-        var newWins     = wins     ?? current.Wins;
-        var newLosses   = losses   ?? current.Losses;
-
-        // username-wijziging ook doorvoeren in _users (omgekeerde lookup simplificeren we)
-        if (!string.Equals(newUsername, current.Username, StringComparison.Ordinal))
+        if (username == "" || username is null)
         {
-            // simpele heropbouw: verwijder oude username -> id en voeg nieuwe toe
-            _users.TryRemove(current.Username, out _);
-            _users[newUsername] = id;
+            return new ServiceResponse<User>(ErrorCode.ValueIsNull, "Username may not be empty or null");
+        }
+        if (checkIfUsernameExists(username))
+        {
+            return new ServiceResponse<User>(ErrorCode.UsernameExists, "The username is already in use.");
         }
 
-        _profiles[id] = (newUsername, newWins, newLosses);
-        return true;
+        //Optionally replace this with a method call that checks passwords
+        if (password.Length < 8)
+        {
+            return new ServiceResponse<User>(ErrorCode.WeakPassword, "The password is not strong enough.");
+        }
+
+        if (password != passwordConfirm)
+        {
+            return new ServiceResponse<User>(ErrorCode.PasswordMismatch, "Passwords do not match.");
+        }
+
+        try
+        {
+            User newUser = new User(username);
+            users.Add(newUser);
+            return new ServiceResponse<User>(newUser);
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<User>(ErrorCode.DatabaseError, ex.ToString());
+        }
     }
-    
-    // -------------------------------
-    // Kaartbeheer
-    // -------------------------------
-    public List<Card> GetOwnedCards(Guid userId)
+
+    public ServiceResponse<User> UpdateUser(string token, string? newUsername, string? newPassword, string? passwordConfirm)
     {
-        return _ownedCards.GetOrAdd(userId, _ => new List<Card>());
+        if (newPassword is not null && passwordConfirm is not null)
+        {
+            //Optionally replace this with a method call that checks passwords
+            if (newPassword.Length < 8)
+            {
+                return new ServiceResponse<User>(ErrorCode.WeakPassword, "The password is not strong enough.");
+            }
+
+            if (newPassword != passwordConfirm)
+            {
+                return new ServiceResponse<User>(ErrorCode.PasswordMismatch, "Passwords do not match.");
+            }
+            try
+            {
+                //saving password has in DB
+                return new ServiceResponse<User>("Password updated");
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<User>(ErrorCode.DatabaseError, ex.ToString());
+            }
+        }
+
+        //get user bij username (gotten from token)
+        User currentUser = new User("ThisUserUsername");
+        if (newUsername is not null)
+        {
+            if (checkIfUsernameExists(newUsername))
+            {
+                return new ServiceResponse<User>(ErrorCode.UsernameExists, "The username is already in use.");
+            }
+            try
+            {
+                //Update user in the database
+                currentUser.Username = newUsername;
+                return new ServiceResponse<User>(currentUser);
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<User>(ErrorCode.DatabaseError, ex.ToString());
+            }
+        }
+        return new ServiceResponse<User>(ErrorCode.ValueIsNull, "No values were given");
     }
 
-    public void AddOwnedCard(Guid userId, string cardName)
+    public ServiceResponse<User> Login(string username, string password)
     {
-        var cards = _ownedCards.GetOrAdd(userId, _ => new List<Card>());
-        cards.Add(new Card(Guid.NewGuid(), cardName));
+        //get hashed password from database by username
+        //check if the has and the normal password give a correct response
+        if (username is not null && password is not null)
+        {
+            //generate token
+            string token = "1234-abcd-5678";
+            User loggedInUser = new User(username, token);
+            return new ServiceResponse<User>(loggedInUser);
+        }
+        return new ServiceResponse<User>(ErrorCode.InvalidCredentials, "Invalid username password combination");
     }
 
-// -------------------------------
-// Deckbeheer
-// -------------------------------
-    public Deck CreateDeck(Guid ownerId, string name)
+    public ServiceResponse<List<Card>> GetCards(string token)
     {
-        var decks = _decks.GetOrAdd(ownerId, _ => new List<Deck>());
-        var deck = new Deck(Guid.NewGuid(), ownerId, name, new List<Guid>());
-        decks.Add(deck);
-        return deck;
+        List<Card> cards = new List<Card>();
+        Card newCard = new Card(1, "Boulderfist Ogre", 6, 7, 6, Tribe.Neutral, Rarity.Common);
+        cards.Add(newCard);
+        //Get all the cards from a user by token (a user can only see its own cards
+        return new ServiceResponse<List<Card>>(cards);
     }
 
-    public IEnumerable<Deck> GetDecks(Guid ownerId)
+    public ServiceResponse<List<Deck>> GetDecks(string token)
     {
-        return _decks.GetOrAdd(ownerId, _ => new List<Deck>());
+        List<Deck> decks = new List<Deck>();
+        List<Card> cards = new List<Card>();
+        Deck newDeck = new Deck(1, "Boulderfisting", cards);
+        decks.Add(newDeck);
+        //Get all the decks from a user by token (a user can only see its own decks)
+        return new ServiceResponse<List<Deck>>(decks);
     }
 
-    public Deck? ModifyDeckCards(Guid ownerId, Guid deckId, List<Guid>? add, List<Guid>? remove)
+    public ServiceResponse<List<Card>> SaveCards(string token, List<Card> cardsToSave)
     {
-        if (!_decks.TryGetValue(ownerId, out var decks)) return null;
-        var deck = decks.FirstOrDefault(d => d.Id == deckId);
-        if (deck == null) return null;
-
-        if (add != null)
-            deck.CardIds.AddRange(add);
-
-        if (remove != null)
-            deck.CardIds.RemoveAll(id => remove.Contains(id));
-
-        return deck;
+        //get user by token and save the cards to the db
+        List<Card> cards = new List<Card>();
+        //for each card in cardsToSave get cardname etc
+        Card newCard = new Card("Boulderfist Ogre", 6, 7, 6, Tribe.Neutral, Rarity.Common);
+        cards.Add(newCard);
+        return new ServiceResponse<List<Card>>(cards);
+    }
+    public ServiceResponse<Deck> SaveDeck(string token, string deckName, List<Card> CardsInDeck)
+    {
+        //get user by token and save the deck to the db
+        Deck newDeck = new Deck(deckName, CardsInDeck);
+        return new ServiceResponse<Deck>(newDeck);
     }
 
-
+    private bool checkIfUsernameExists(string username)
+    {
+        //get all usernames from DB and check if it already exists
+        foreach (var user in users)
+        {
+            if (user.Username.Equals(username, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

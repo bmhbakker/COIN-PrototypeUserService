@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using PrototypeUserService.Contracts;
 using PrototypeUserService.Services;
+using PrototypeUserService.Models.Requests;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace PrototypeUserService.Endpoints;
 
@@ -8,74 +9,93 @@ public static class UsersEndpoints
 {
     public static void Map(WebApplication app)
     {
-        // POST /users/register
-        app.MapPost("/users/register", (RegisterRequest req, MockUserService users) =>
+        // POST /users/getUserByUsername
+        app.MapPost("/users/getUserByUsername", (getUserByUsernameRequest? req, MockUserService users) =>
         {
-            var id = users.Register(req.Username, req.Password);
-            return Results.Ok(new { userId = id, req.Username });
+            if (req is null)
+            {
+                return Results.BadRequest("Request body is missing");
+            }
+
+            if (string.IsNullOrEmpty(req.Username))
+            {
+                return Results.Problem("No username was set");
+            }
+            var user = users.GetUserByUsername(req.Username);
+            return Results.Ok(new { user });
         });
 
-        // POST /users/login
-        app.MapPost("/users/login", (LoginRequest req, MockUserService users) =>
+        //POST /users/register
+        app.MapPost("users/register", (registerRequest? req, MockUserService users) =>
         {
-            var token = users.Login(req.Username, req.Password);
+            if (req is null)
+            {
+                return Results.BadRequest("Request body is missing");
+            }
+
+            var user = users.Register(req.Username, req.Password, req.PasswordConfirm);
+            return Results.Ok(new { user });
+        });
+
+        //POST /users/updateUser
+        app.MapPost("users/updateUser", (updateUserRequest? req, MockUserService users) =>
+        {
+            if (req is null)
+            {
+                return Results.BadRequest("Request body is missing");
+            }
+
+            var token = req.Token;
+
+            //Token validation
             if (token is null)
-                return Results.Json(new ErrorResponse(false, "INVALID_CREDENTIALS", "Gebruiker onbekend of onjuist wachtwoord."),
-                    statusCode: StatusCodes.Status401Unauthorized);
-
-            return Results.Ok(new { token });
-        });
-
-        // GET /users/{id}
-        app.MapGet("/users/{id:guid}", (Guid id, MockUserService users) => 
-        {
-            var p = users.GetProfile(id); 
-            if (p is null)
-                return Results.Json(new ErrorResponse(false, "NOT_FOUND", "Gebruiker niet gevonden."),
-                    statusCode: StatusCodes.Status404NotFound);
-
-            var (userId, username, wins, losses) = p.Value; 
-            return Results.Ok(new UserProfile(userId, username, wins, losses)); 
-        });
-        
-        // PUT /users/{id}
-        app.MapPut("/users/{id:guid}", (Guid id, UpdateProfileRequest req, MockUserService users) => 
-        {
-            var ok = users.UpdateProfile(id, req.Username, req.Wins, req.Losses); 
-            if (!ok)
-                return Results.Json(new ErrorResponse(false, "NOT_FOUND", "Gebruiker niet gevonden."),
-                    statusCode: StatusCodes.Status404NotFound);
-
-            var p = users.GetProfile(id)!.Value; 
-            return Results.Ok(new UserProfile(p.Id, p.Username, p.Wins, p.Losses)); 
-        });
-
-
-
-        // POST /auth/resolve
-        app.MapPost("/auth/resolve", (ResolveTokenRequest req, MockUserService users) =>
-        {
-            var userId = users.ResolveUser(req.Token);
-            if (userId is null)
-                return Results.Json(new ErrorResponse(false, "INVALID_TOKEN", "Token ongeldig of onbekend."),
-                    statusCode: StatusCodes.Status401Unauthorized);
-
-            return Results.Ok(new ResolvedUser(userId.Value));
-        });
-
-        // GET /_controller/ping
-        app.MapGet("/_controller/ping", async (IHttpClientFactory cf) =>
-        {
-            var client = cf.CreateClient("Controller");
-            try
             {
-                using var resp = await client.GetAsync("/");
-                return Results.Ok(new { controller = client.BaseAddress!.ToString(), status = (int)resp.StatusCode });
+                return Results.Unauthorized();
             }
-            catch (Exception ex)
+
+            string newUsername = req.Username ?? "";
+            string newPassword = req.Password ?? "";
+            string newPasswordConfirm = req.PasswordConfirm ?? "";
+
+            if (!string.IsNullOrEmpty(newUsername) && !string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(newPasswordConfirm))
             {
-                return Results.Ok(new { controller = client.BaseAddress!.ToString(), error = ex.GetType().Name });
+                if (newPassword == newPasswordConfirm)
+                {
+                    var user = users.UpdateUser(token, newUsername, newPassword, newPasswordConfirm);
+                    return Results.Ok(new { user });
+                }
+                return Results.BadRequest("newPassword != newPasswordConfirm - edit all");
             }
+
+            if (!string.IsNullOrEmpty(newUsername))
+            {
+                var user = users.UpdateUser(token, newUsername, null, null);
+                return Results.Ok(new { user });
+            }
+
+            if (!string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(newPasswordConfirm))
+            {
+                if (newPassword == newPasswordConfirm)
+                {
+                    var user = users.UpdateUser(token, null, newPassword, newPasswordConfirm);
+                    return Results.Ok(new { user });
+                }
+                return Results.BadRequest();
+            }
+
+            return Results.BadRequest("nothing to update");
+        });
+
+        //POST /users/login
+        app.MapPost("users/login", (loginUserRequest? req, MockUserService users) =>
+        {
+            if (req is null)
+            {
+                return Results.BadRequest("Request body is missing");
+            }
+
+            var user = users.Login(req.Username, req.Password);
+            return Results.Ok(new { user });
         });
     }
 }

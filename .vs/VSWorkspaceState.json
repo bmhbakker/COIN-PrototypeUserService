@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Endpoints",
+    "\\Enums",
+    "\\Models",
+    "\\Models\\Requests"
+  ],
+  "SelectedNode": "\\Models\\Requests\\UserRequests.cs",
+  "PreviewInSolutionExplorer": false
+}

@@ -9,7 +9,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a379920-6ef2-406f-9e49-5134b16c3d51" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/.idea.PrototypeUserService/.idea/encodings.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/.idea.PrototypeUserService/.idea/indexLayout.xml" afterDir="false" />
@@ -21,7 +20,6 @@
       <change afterPath="$PROJECT_DIR$/Contracts/Profile.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Contracts/ResolveTokenRequest.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Contracts/Users.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Endpoints/DecksEndpoints.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Endpoints/UserEndpoints.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
@@ -30,7 +28,6 @@
       <change afterPath="$PROJECT_DIR$/PrototypeUserService.http" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/PrototypeUserService.sln" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Services/MockUserService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/user-service-contract.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
@@ -56,10 +53,10 @@
     <setting file="file://$PROJECT_DIR$/Endpoints/UserEndpoints.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/MockUserService.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 3
-}</component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 3
+}]]></component>
   <component name="ProjectId" id="35Kn2qd0a4hhSKU3IpKNaGhp99r" />
   <component name="ProjectViewState">
     <option name="autoscrollToSource" value="true" />
@@ -67,25 +64,25 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.PrototypeUserService: http.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.PrototypeUserService: http.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "master",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.PrototypeUserService: http">
     <configuration name="PrototypeUserService: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/PrototypeUserService.csproj" />
@@ -119,34 +116,6 @@
         <option name="Build" />
       </method>
     </configuration>
-    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="prototypeuserservice" />
-          <option name="containerName" value="prototypeuserservice" />
-          <option name="contextFolderPath" value="C:\Users\klein\Documents\KS\School\Jaar3\PINC\Prototype\User Service\PrototypeUserService" />
-          <option name="portBindings">
-            <list>
-              <DockerPortBindingImpl>
-                <option name="containerPort" value="8080" />
-                <option name="hostIp" value="127.0.0.1" />
-                <option name="hostPort" value="8080" />
-              </DockerPortBindingImpl>
-            </list>
-          </option>
-          <option name="sourceFilePath" value="Dockerfile" />
-        </settings>
-      </deployment>
-      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile">
-        <settings />
-      </deployment>
-      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
-      <method v="2" />
-    </configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -155,9 +124,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1762867428436</updated>
-      <workItem from="1762867430067" duration="5728000" />
-      <workItem from="1762944488019" duration="3257000" />
-      <workItem from="1763123503386" duration="115000" />
+      <workItem from="1762867430067" duration="5333000" />
     </task>
     <servers />
   </component>
