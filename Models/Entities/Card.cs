@@ -32,43 +32,4 @@ public class Card
         CardTribe = tribe;
         CardRarity = rarity;
     }
-
-    public int heal(int amount)
-    {
-        HealthPoints += amount;
-        return HealthPoints;
-    }
-
-    public int takeDamage(int amount)
-    {
-        HealthPoints -= amount;
-        return HealthPoints;
-    }
-    public int buffPower(int amount)
-    {
-        Power += amount;
-        return Power;
-    }
-
-    //Currently the original cost of the card is not saved (so ingame display is the amount that it cost when played).
-    //This could give problems if there are cards such as "whenever you play a card that costs x or more" or when
-    //the card is added to any players hand from the battlefield
-    public int debuffPower(int amount)
-    {
-        Power -= amount;
-        return Power;
-    }
-
-    public int increaseCost(int amount)
-    {
-        Cost += amount;
-        return Cost;
-    }
-
-    public int decreaseCost(int amount)
-    {
-        Cost -= amount;
-        return Cost;
-    }
-
 }
