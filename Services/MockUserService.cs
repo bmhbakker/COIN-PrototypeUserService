@@ -68,7 +68,7 @@ public class MockUserService
             }
             try
             {
-                //saving password has in DB
+                //saving password hash in DB
                 return new ServiceResponse<User>("Password updated");
             }
             catch (Exception ex)
@@ -77,7 +77,10 @@ public class MockUserService
             }
         }
 
-        //get user bij username (gotten from token)
+        //get user bij username (using GetUserByUsername)
+        //since only the logged in user can change their own data (username and password) and the user gets their own user object on login we don't need to get additional 
+        //details from the database (only push). If the login changes to only returning a token we need to get the user by the token here as well. This is only needed to update the
+        //correct user (UPDATE where UserId == (or username since this is unique as well)
         User currentUser = new User("ThisUserUsername");
         if (newUsername is not null)
         {
@@ -102,7 +105,7 @@ public class MockUserService
     public ServiceResponse<User> Login(string username, string password)
     {
         //get hashed password from database by username
-        //check if the hash and the normal password give a correct response
+        //check if the hash and the normal password "are the same"
         if (username is not null && password is not null)
         {
             //generate token
@@ -138,7 +141,7 @@ public class MockUserService
         List<Card> cards = new List<Card>();
         //for each card in cardsToSave get cardname etc
         Card newCard = new Card("Boulderfist Ogre", 6, 7, 6, Tribe.Neutral, Rarity.Common);
-        cards.Add(newCard);
+        cards.Add(newCard); //<-- this is the actual update to the database. 
         return new ServiceResponse<List<Card>>(cards);
     }
     public ServiceResponse<Deck> SaveDeck(string token, string deckName, List<Card> CardsInDeck)
