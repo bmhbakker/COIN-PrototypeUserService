@@ -40,7 +40,7 @@ public class User
 
     public void addLoss()
     {
-        Loss++;
+        Losses++;
     }
 
     public void updateMmr(int mmr)
