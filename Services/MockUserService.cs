@@ -102,7 +102,7 @@ public class MockUserService
     public ServiceResponse<User> Login(string username, string password)
     {
         //get hashed password from database by username
-        //check if the has and the normal password give a correct response
+        //check if the hash and the normal password give a correct response
         if (username is not null && password is not null)
         {
             //generate token
