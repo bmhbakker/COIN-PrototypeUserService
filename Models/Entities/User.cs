@@ -11,12 +11,12 @@ public class User
     public List<Deck>? Decks { get; set; } = null;
     public int Mmr { get; private set; } = 0;
 
-    public User(int id, string username, int wins, int loss, List<Card>? cards, List<Deck>? decks, int mmr)
+    public User(int id, string username, int wins, int losses, List<Card>? cards, List<Deck>? decks, int mmr)
     {
         Id = id;
         Username = username;
         Wins = wins;
-        Loss = loss;
+        Losses = losses;
         Cards = cards;
         Decks = decks;
         Mmr = mmr;
