@@ -4,10 +4,9 @@ public class User
 {
     public int Id { get; }
     public string Username { get; set; }
-
     public string? Token { get; } = null;
     public int Wins { get; private set; } = 0;
-    public int Loss { get; private set; } = 0;
+    public int Losses { get; private set; } = 0;
     public List<Card>? Cards { get; set; } = null;
     public List<Deck>? Decks { get; set; } = null;
     public int Mmr { get; private set; } = 0;
